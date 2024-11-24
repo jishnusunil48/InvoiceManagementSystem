@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile # This will use the Dockerfile located at D:\Interview\InvoiceManagementSystem\Dockerfile
+    container_name: springboot-app
+    ports:
+      - "8080:8080" # Maps host port 8080 to container port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13 # Using the official PostgreSQL image
+    container_name: postgres-db
+    ports:
+      - "5433:5432" # Maps host port 5433 to container port 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist database data
+
+volumes:
+  postgres_data:
+    driver: local
